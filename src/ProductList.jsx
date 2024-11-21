@@ -4,6 +4,7 @@ import CartItem from './CartItem';
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [addedToCart, setAddedToCart] = useState({})
 
     const plantsArray = [
         {
@@ -246,8 +247,15 @@ const handlePlantsClick = (e) => {
     e.preventDefault();
     setShowCart(false);
   };
+  const handleAddToCart=(product)=>{
+    dispatch(addItem(product));
+    setAddedToCart((prevState)=>({
+        ...prevState,
+        [product.name]:true,
+    }))
+  }
     return (
-        <div>
+        <div className='container' style={{padding:"5px 14px"}}>
              <div className="navbar" style={styleObj}>
             <div className="tag">
                <div className="luxury">
@@ -267,9 +275,60 @@ const handlePlantsClick = (e) => {
             </div>
         </div>
         {!showCart? (
-        <div className="product-grid">
-
-
+        <div className="product-grid" style={{padding:"0px 10px;"}}>
+            {plantsArray.map(plant_category=>(
+                <div style={{marginTop:"30px"}}>
+                    <div style={{display:"flex"}}>
+                    <h2 
+                    style={{
+                        position:"relative",
+                        right:"0px",
+                        margin:"0 auto"
+                        
+                        }}>
+                    {plant_category.category}
+                    </h2>
+                    </div>
+                <div style={{display:"flex"}}>
+                    {plant_category.plants.map(plant=>(
+                        <div style=
+                        {{width:"25vw",
+                        height:"380px",
+                        fontSize:"1.0em",
+                        fontWeight:"600"
+                        
+                        }}>
+                        <img src={plant.image} className="col-3" style={{height:"300px", width:"25vw"}}/>
+                            <span>
+                                {plant.name}
+                            </span><br />
+                            <span  
+                            style={{
+                                color:"grey",
+                                fontWeight:300,
+                                margin:"15px 0px"
+                            }}
+                            
+                            >
+                                {plant.description}
+                            </span>
+                            <br />
+                            <span 
+                            style={{
+                                color:"blue",
+                                margin:"15px 0px"
+                            }}
+                            > 
+                                {plant.cost}
+                            </span>
+                            <button>
+                                Add To Cart
+                            </button>
+                            </div>
+                    ))}
+                </div>
+                </div>
+            ))}
         </div>
  ) :  (
     <CartItem onContinueShopping={handleContinueShopping}/>
